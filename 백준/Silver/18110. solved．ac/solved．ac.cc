@@ -8,7 +8,6 @@ const float PERCENT = 0.15f;
 int main()
 {
 	vector<int> Scores;
-	vector<int> Finals;
 	int Answer = 0;
 
 	int n;
@@ -29,20 +28,15 @@ int main()
 	if (Scores.size() > 0)
 	{
 		ExceptPeople = round((int)Scores.size() * PERCENT);
+		float Temp = 0.f;
 
 		// 절사평균만큼 제외하고 계산할 점수
 		for (int i = ExceptPeople; i < ((int)Scores.size() - ExceptPeople); i++)
 		{
-			Finals.push_back(Scores[i]);
+			Temp += Scores[i];	
 		}
 
-		float Temp = 0.f;
-		for (int i = 0; i < Finals.size(); i++)
-		{
-			Temp += Finals[i];
-		}
-
-		Answer = round(Temp / Finals.size());
+		Answer = round(Temp / (Scores.size() - (ExceptPeople * 2)));
 	}
 
 	// 최종 평균 난이도
