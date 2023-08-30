@@ -1,19 +1,12 @@
 #include <iostream>
-#include <vector>
+#include <queue>
+
 using namespace std;
 
 const int TURN_LEFT = 0;
 const int TURN_RIGHT = 1;
 
-int DirX[4] = { 1, 0, -1, 0 };
-int DirY[4] = { 0, 1, 0, -1 };
-
-struct SCommand
-{
-	string Command;
-	int D;
-};
-
+int Dir[4][2] = { {1, 0}, {0, 1}, {-1, 0}, {0, -1} };
 int main()
 {
 	int Result = 0;
@@ -21,37 +14,33 @@ int main()
 	int X = 0, Y = 0;
 	cin >> m >> n;
 
-	vector<SCommand> Commands;
+	queue<pair<string, int>> Commands;
 
 	// 명령어 받기
 	for (int i = 0; i < n; i++)
 	{
-		SCommand Temp;
 		string s;
 		int a;
-
 		cin >> s >> a;
-		Temp.Command = s;
-		Temp.D = a;
 
-		Commands.push_back(Temp);
+		Commands.push(make_pair(s, a));
 	}
 
 	// 현재 방향
 	int CurDir = 0;
 	int dx = 0, dy = 0;
-	for (int i = 0; i < n; i++)
+
+
+	while (!Commands.empty())
 	{
-		if (Commands[i].Command == "MOVE")
+		if (Commands.front().first == "MOVE")
 		{
-			// 현재 방향으로 D만큼 이동
-			// 0이면 상쇄
-			dx = X + DirX[CurDir] * Commands[i].D;
-			dy = Y + DirY[CurDir] * Commands[i].D;
+			dx = X + Dir[CurDir][0] * Commands.front().second;
+			dy = Y + Dir[CurDir][1] * Commands.front().second;
 		}
-		else if (Commands[i].Command == "TURN")
+		else if(Commands.front().first == "TURN")
 		{
-			if (Commands[i].D == TURN_LEFT)
+			if (Commands.front().second == TURN_LEFT)
 			{
 				// 왼쪽 90도 회전
 				if (--CurDir < 0)
@@ -78,6 +67,7 @@ int main()
 
 		X = dx;
 		Y = dy;
+		Commands.pop();
 	}
 
 	if (Result == -1)
