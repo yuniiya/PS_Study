@@ -1,65 +1,54 @@
 #include <iostream>
-#include <vector>
 #include <algorithm>
+#include <vector>
 
 using namespace std;
 
-vector<int> Dwarfs;
-vector<int> CombiArray;
-vector<int> SaveDwarfs;
-int Sum = 0;
-void Combi(int Index, vector<int> CombiArray)
+int N[9];
+vector<int> Ans;
+int sum;
+pair<int, int> P;
+void solve()
 {
-	if (CombiArray.size() == 7)
+	for (int i = 0; i < 9; i++)
 	{
-		for (int i = 0; i < 7; i++)
+		for (int j = 0; j < i; j++)
 		{
-			Sum += Dwarfs[CombiArray[i]];
-		}
-
-		return;
-	}
-
-	for (int i = Index + 1; i < 9; i++)
-	{
-		CombiArray.push_back(i);
-		Combi(i, CombiArray);
-
-		if (100 == Sum && SaveDwarfs.empty())
-		{
-			for (int j = 0; j < 7; j++)
+			if (sum - N[i] - N[j] == 100)
 			{
-				SaveDwarfs.push_back(Dwarfs[CombiArray[j]]);
+				P = { i, j };
+				return;
 			}
-
-			break;
 		}
-
-		Sum = 0;
-		CombiArray.pop_back();
 	}
-
 }
 
 int main()
 {
-	// 난쟁이의 수가 9줄에 걸쳐 입력
+	ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+	cout.tie(NULL);
+
+	// 9명 중에 7명 뽑았을 때, 합이 100
 	for (int i = 0; i < 9; i++)
 	{
-		int a;
-		cin >> a;
-		Dwarfs.push_back(a);
+		cin >> N[i];
+		sum += N[i];
 	}
-	
 
-	// 7번 뽑는 조합을 찾은 뒤, 찾아온 인덱스의 값을 더하기
-	// 100이 아니라면 다시 찾기
-	Combi(-1, CombiArray);
+	solve();
 
-	// 찾아온 난쟁이의 키를 오름차순으로 출력
-	sort(SaveDwarfs.begin(), SaveDwarfs.end());
+	// 인덱스 i, j는 빼고 출력
+	for (int i = 0; i < 9; i++)
+	{
+		if (i == P.first || i == P.second)
+			continue;
 
-	for (int i : SaveDwarfs)
+		Ans.push_back(N[i]);
+	}
+
+	sort(Ans.begin(), Ans.end());
+	for (int i : Ans)
 	{
 		cout << i << '\n';
 	}
