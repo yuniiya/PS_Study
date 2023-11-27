@@ -1,5 +1,4 @@
 #include <iostream>
-#include <algorithm>
 
 using namespace std;
 int Alpha[26];
@@ -32,7 +31,6 @@ int main()
 	}
 	else
 	{
-		sort(Ans.begin(), Ans.end());
 		cout << Ans << "\n";
 	}
 }
