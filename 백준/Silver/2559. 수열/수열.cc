@@ -9,7 +9,6 @@ int main()
 	cin.tie(NULL);
 	cout.tie(NULL);
 
-	vector<int> V;
 	vector<int> Sum;
 	vector<int> Ans;
 
@@ -23,7 +22,6 @@ int main()
 		int a;
 		cin >> a;
 
-		V.push_back(a);
 		// 부분합 저장
 		if (i != 0)
 			Sum[i] = Sum[i - 1] + a;
