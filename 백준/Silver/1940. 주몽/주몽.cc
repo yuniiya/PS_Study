@@ -20,21 +20,11 @@ int main()
 
 	for (int i = 0; i < n; i++)
 	{
-		if (M[i] == 0)
-			continue;
-
 		for (int j = i + 1; j < n; j++)
 		{
-			if (M[j] == 0)
-				continue;
-
 			if (M[i] + M[j] == m)
 			{
 				Cnt++;
-
-				M[i] = 0;
-				M[j] = 0;
-
 				break;
 			}
 		}
