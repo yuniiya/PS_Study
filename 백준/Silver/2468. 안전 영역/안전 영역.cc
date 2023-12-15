@@ -79,17 +79,12 @@ int main()
 			}
 		}
 
-		Idx[h] = Ret;
+		Ans = max(Ret, Ans);
 		Ret = 0;
 
 		fill(&M[0][0], &M[0][0] + 104 * 104, 0);
 		fill(&Visited[0][0], &Visited[0][0] + 104 * 104, false);
 		h--;
-	}
-
-	for (int i = 0; i <= th; i++)
-	{
-		Ans = max(Ans, Idx[i]);
 	}
 
 	cout << Ans << endl;
