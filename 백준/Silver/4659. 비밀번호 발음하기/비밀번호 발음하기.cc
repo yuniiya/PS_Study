@@ -60,7 +60,7 @@ int main()
 				break;
 			}
 
-			if (prev >= 1 && prev == s[i] && (s[i] != 'e' && s[i] != 'o'))
+			if (prev == s[i] && (s[i] != 'e' && s[i] != 'o'))
 			{
 				Flag = false;
 				break;
