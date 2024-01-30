@@ -1,73 +1,80 @@
-#include <bits/stdc++.h>
+#include <iostream>
+#include <algorithm>
+#include <vector>
 
 using namespace std;
-#define y1 aaaa
 
 int dy[] = { -1, 0, 1, 0 };
 int dx[] = { 0, -1, 0, 1 };
 
-int n, m, k;
-int Cnt;
-int y1, x1, y2, x2;
-int N[104][104];
-bool Visited[104][104];
+int m, n, k;
+int lx, ly, rx, ry;
+int N[101][101];
+bool Visited[101][101];
 vector<int> V;
 
 int dfs(int y, int x)
 {
+	int Ret = 1;
+
+	if (Visited[y][x])
+	{
+		return Ret;
+	}
+
 	Visited[y][x] = true;
-	int Ans = 1;
 
 	for (int i = 0; i < 4; i++)
 	{
-		int ny = y + dy[i];
-		int nx = x + dx[i];
+		int ny = dy[i] + y;
+		int nx = dx[i] + x;
 
-		if (ny < 0 || ny >= n || nx < 0 || nx >= m)
+		if (ny >= m || nx >= n || ny < 0 || nx < 0 || N[ny][nx] != 0)
 			continue;
 
-		if (N[ny][nx] == 0 && !Visited[ny][nx])
-			Ans += dfs(ny, nx);
+		if (!Visited[ny][nx])
+		{
+			Ret += dfs(ny, nx);
+		}
 	}
 
-	return Ans;
+	return Ret;
 }
 
 int main()
 {
-	cin >> n >> m >> k;
+	cin >> m >> n >> k;
 
 	for (int i = 0; i < k; i++)
 	{
-		cin >> x1 >> y1 >> x2 >> y2;
+		cin >> lx >> ly >> rx >> ry;
 
-		for (int j = y1; j < y2; j++)
+		for (int y = ly; y < ry; y++)
 		{
-			for (int l = x1; l < x2; l++)
+			for (int x = lx; x < rx; x++)
 			{
-				N[j][l] = 1;
+				N[y][x] = 1;
 			}
 		}
 	}
 
-	for (int i = 0; i < n; i++)
+	for (int i = 0; i < m; i++)
 	{
-		for (int j = 0; j < m; j++)
+		for (int j = 0; j < n; j++)
 		{
-			if (!Visited[i][j] && N[i][j] == 0)
+			if (N[i][j] == 0 && !Visited[i][j])
 			{
-				V.push_back(dfs(i, j));
-				Cnt++;
+				V.push_back({ dfs(i, j) });
 			}
 		}
 	}
-
-	cout << Cnt << '\n';
 
 	sort(V.begin(), V.end());
 
+	cout << V.size() << endl;
+
 	for (auto v : V)
 	{
-		cout << v << ' ';
+		cout << v << " ";
 	}
 }
