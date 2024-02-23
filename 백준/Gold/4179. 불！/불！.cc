@@ -15,7 +15,6 @@ int fire_check[1004][1004];
 int j_check[1004][1004];
 const int INF = 987654321;
 
-vector<pair<int, int>> fire_pos;
 pair<int, int> j_pos;
 queue<pair<int, int>> q;
 
