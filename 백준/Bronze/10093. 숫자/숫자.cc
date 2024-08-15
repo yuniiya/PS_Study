@@ -3,7 +3,7 @@
 
 using namespace std;
 
-int a, b;
+long long a, b;
 int main()
 {
 	ios_base::sync_with_stdio(0);
@@ -24,7 +24,7 @@ int main()
 
 		cout << b - a - 1 << '\n';
 
-		for (int i = a + 1; i < b; i++)
+		for (long long i = a + 1; i < b; i++)
 		{
 			cout << i << ' ';
 		}
