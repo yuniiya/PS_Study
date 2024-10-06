@@ -48,12 +48,8 @@ int main(void)
 			}
 			else
 			{
-				cursor = L.insert(cursor, c);
+				L.insert(cursor, c);
 
-				if (cursor != L.end())
-				{
-					cursor++;
-				}
 			}
 		}
 
