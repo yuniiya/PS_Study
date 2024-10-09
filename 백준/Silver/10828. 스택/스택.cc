@@ -3,53 +3,14 @@
 #include <vector>
 #include <string>
 #include <list>
+#include <stack>
 
 using namespace std;
 
-const int MX = 1000005;
-int dat[MX];
-int pos = 0;
-
-bool empty()
-{
-	if (pos - 1 < 0)
-		return true;
-
-	return false;
-}
-
-void push(int x)
-{
-	dat[pos++] = x;
-}
-
-int pop() 
-{
-	if (!empty())
-	{
-		pos--;
-		
-		return dat[pos];
-	}
-
-	return -1;
-}
-
-int top() 
-{
-	if (!empty())
-		return dat[pos - 1];
-
-	return -1;
-}
-
-int size()
-{
-	return pos;
-}
-
 int main(void) 
 {
+	stack<int> st;
+	
 	int a;
 	cin >> a;
 
@@ -63,23 +24,34 @@ int main(void)
 			int i;
 			cin >> i;
 
-			push(i);
+			st.push(i);
 		}
 		else if (s == "pop")
 		{
-			cout << pop() << '\n';
+			if (!st.empty())
+			{
+				cout << st.top() << '\n';
+				st.pop();
+			}
+			else
+			{
+				cout << -1 << '\n';
+			}
 		}
 		else if (s == "size")
 		{
-			cout << size() << '\n';
+			cout << st.size() << '\n';
 		}
 		else if (s == "empty")
 		{
-			cout << empty() << '\n';
+			cout << st.empty() << '\n';
 		}
 		else if (s == "top")
 		{
-			cout << top() << '\n';
+			if (!st.empty())
+				cout << st.top() << '\n';
+			else
+				cout << -1 << '\n';
 		}
 	}
 }
