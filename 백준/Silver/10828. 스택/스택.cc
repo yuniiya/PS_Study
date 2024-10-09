@@ -1,106 +1,85 @@
 #include <iostream>
+#include <algorithm>
+#include <vector>
+#include <string>
+#include <list>
 
 using namespace std;
-const int MAX = 10001;
 
-class Stack
+const int MX = 1000005;
+int dat[MX];
+int pos = 0;
+
+bool empty()
 {
-public:
-	Stack(int _Size)
-		: TopIdx(-1)
+	if (pos - 1 < 0)
+		return true;
+
+	return false;
+}
+
+void push(int x)
+{
+	dat[pos++] = x;
+}
+
+int pop() 
+{
+	if (!empty())
 	{
-		Array = new int[_Size];
-	}
-	
-	~Stack()
-	{};
-	
-public:
-	int empty()
-	{
-		if (TopIdx == -1)
-		{
-			return 1;
-		}
-
-		return 0;
-	}
-
-	void push(int _x)
-	{
-		if (TopIdx >= MAX)
-			return;
-
-		Array[++TopIdx] = _x;
-	}
-
-	int pop()
-	{
-		if (TopIdx == -1)
-		{
-			return -1;
-		}
-
-		return Array[TopIdx--];
-	}
-
-	int size()
-	{
-		return TopIdx + 1;
-	}
-
-	int top()
-	{
-		if (TopIdx == -1)
-		{
-			return -1;
-		}
+		pos--;
 		
-		return Array[TopIdx];
+		return dat[pos];
 	}
 
-private:
-	int TopIdx;
-	int* Array;
-};
+	return -1;
+}
 
-
-int main()
+int top() 
 {
-	int n;
-	cin >> n;
+	if (!empty())
+		return dat[pos - 1];
 
-	Stack stack(n);
+	return -1;
+}
 
-	for (int i = 0; i < n; i++)
+int size()
+{
+	return pos;
+}
+
+int main(void) 
+{
+	int a;
+	cin >> a;
+
+	for (int i = 0; i < a; i++)
 	{
 		string s;
 		cin >> s;
 
-		// 공백을 기준으로 입력이 끊겼다면, push인지 확인 후 다음 숫자 입력받기 
 		if (s == "push")
 		{
-			int x;
-			cin >> x;
+			int i;
+			cin >> i;
 
-			stack.push(x);
+			push(i);
 		}
-		else if(s == "pop")
+		else if (s == "pop")
 		{
-			cout << stack.pop() << endl;
+			cout << pop() << '\n';
 		}
 		else if (s == "size")
 		{
-			cout << stack.size() << endl;
+			cout << size() << '\n';
 		}
 		else if (s == "empty")
 		{
-			cout << stack.empty() << endl;
+			cout << empty() << '\n';
 		}
 		else if (s == "top")
 		{
-			cout << stack.top() << endl;
+			cout << top() << '\n';
 		}
 	}
 }
-
