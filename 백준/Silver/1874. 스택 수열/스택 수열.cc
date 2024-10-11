@@ -7,90 +7,37 @@
 
 using namespace std;
 
-int n, a;
-vector<char> sign;
-int main(void) 
+int n, t;
+int cnt = 1;
+string ans;
+int main() 
 {
 	ios::sync_with_stdio(0);
 	cin.tie(0);
 
-	stack<int> target;
-	stack<int> order;
-
-	vector<int> rev;
+	stack<int> st;
 
 	cin >> n;
 
-	for (int i = 0; i < n; i++)
+	while (n--)
 	{
-		cin >> a;
+		cin >> t;
 
-		rev.push_back(a);
-	}
-
-	reverse(rev.begin(), rev.end());
-
-	// 거꾸로
-	for (int i : rev)
-	{
-		target.push(i);
-	}
-
-	int i = 1;
-	while (i <= n)
-	{
-		if (order.empty()) 
+		while (cnt <= t)
 		{
-			order.push(i);
-			sign.push_back('+');
-
-			i++;
+			st.push(cnt++);
+			ans += "+\n";
 		}
-		else
+
+		if (st.top() != t)
 		{
-			if (order.top() < target.top())
-			{
-				order.push(i);
-				sign.push_back('+');
-
-				i++;
-			}
-			else
-			{
-				order.pop();
-				target.pop();
-				sign.push_back('-');
-			}
+			cout << "NO";
+			return 0;
 		}
+
+		st.pop();
+		ans += "-\n";
 	}
 
-	if (target.size() == order.size())
-	{
-		while (!order.empty())
-		{
-			if (order.top() == target.top())
-			{
-				order.pop();
-				target.pop();
-
-				sign.push_back('-');
-			}
-			else
-			{
-				break;
-			}
-		}
-	}
-
-	if (!order.empty())
-	{
-		cout << "NO";
-	}
-	else
-	{
-		for (char e : sign)
-		{
-			cout << e << '\n';
-		}
-	}
+	cout << ans;
 }
