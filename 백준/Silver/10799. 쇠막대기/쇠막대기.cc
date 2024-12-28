@@ -1,56 +1,37 @@
 #include <iostream>
 #include <algorithm>
-#include <vector>
-#include <string>
 #include <stack>
 
 using namespace std;
 
+stack<char> st;
 string s;
-vector<pair<int, int>> sticks;
-vector<int> lasers;
+int ans;
 int main() 
 {
 	ios_base::sync_with_stdio(0);
 	cin.tie(0);
 
-	// ()의 위치
 	cin >> s;
-
-	stack<int> st;
-	vector<int> idx;
 
 	for (int i = 0; i < (int)s.size(); i++)
 	{
-		if (i + 1 <= s.size() - 1 && s[i] == '(' && s[i + 1] == ')')
-		{
-			lasers.push_back(i);
-			i++;
-
-			continue;
-		}
-
-		if (st.empty() || s[i] == '(')
+		if (s[i] == '(')
 		{
 			st.push(s[i]);
-			idx.push_back(i);
 		}
-		else if (s[i] == ')')
+		else
 		{
-			sticks.push_back({ idx.back(), i });
 			st.pop();
-			idx.pop_back();
-		}
-	}
 
-	int ans = (int)sticks.size();
-
-	for (pair<int, int> stick : sticks)
-	{
-		for (int laser : lasers)
-		{
-			if (stick.first < laser && stick.second > laser + 1)
+			// 실수로 레이저를 넣었다면 쇠막대기를 자른다
+			if (s[i - 1] == '(')
 			{
+				ans += st.size();
+			}
+			else
+			{
+				// 쇠막대기의 끝이라면 끝 부분을 하나 더한다
 				ans++;
 			}
 		}
