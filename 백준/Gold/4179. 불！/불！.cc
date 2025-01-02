@@ -1,99 +1,116 @@
 #include <iostream>
 #include <algorithm>
+#include <vector>
+#include <string>
+#include <list>
+#include <stack>
 #include <queue>
 #include <tuple>
-#include <vector>
+#include <deque>
 
 using namespace std;
 
-const int dy[] = { -1, 0, 1, 0 };
-const int dx[] = { 0, 1, 0,-1 };
+int dx[] = { -1, 0, 1, 0 };
+int dy[] = { 0, 1, 0, -1 };
+int r, c, ans;
+int x, y;
+string s;
+char board[1004][1004];
+bool jh_visited[1004][1004];
+int dist[1004][1004];
+int fire_dist[1004][1004];
 
-int r, c, y, x, ans;
-char N[1004][1004];
-int fire_check[1004][1004];
-int j_check[1004][1004];
-const int INF = 987654321;
-
-pair<int, int> j_pos;
-queue<pair<int, int>> q;
-
-int main()
+const int MAX = 987654321;
+int main() 
 {
-	fill(&fire_check[0][0], &fire_check[0][0] + 1004 * 1004, INF);
+	ios_base::sync_with_stdio(0);
+	cin.tie(0);
+
+	queue<pair<int, int>> fire;
+	queue<pair<int, int>> jh;
+
+	fill(&fire_dist[0][0], &fire_dist[0][0] + 1004 * 1004, -1);
 
 	cin >> r >> c;
 
 	for (int i = 0; i < r; i++)
 	{
+		cin >> s;
+
 		for (int j = 0; j < c; j++)
 		{
-			cin >> N[i][j];
+			board[i][j] = s[j];
 
-			if (N[i][j] == 'F')
+			if (s[j] == 'F')
 			{
-				fire_check[i][j] = 1;
-				q.push({ i, j });
+				fire.push({ i, j });
+				fire_dist[i][j] = 0;
 			}
-
-			if (N[i][j] == 'J')
-				j_pos = { i, j };
+			if (s[j] == 'J')
+			{
+				jh.push({ i, j });
+			}
 		}
 	}
 
-	while (q.size())
+	// 불 이동
+	while (!fire.empty())
 	{
-		tie(y, x) = q.front();
-		q.pop();
+		tie(x, y) = fire.front();
+		fire.pop();
 
 		for (int i = 0; i < 4; i++)
 		{
-			int ny = dy[i] + y;
 			int nx = dx[i] + x;
+			int ny = dy[i] + y;
 
-			if (ny < 0 || nx < 0 || ny >= r || nx >= c ||  N[ny][nx] == '#')
+			if (nx < 0 || nx >= r || ny < 0 || ny >= c)
 				continue;
 
-			if (fire_check[ny][nx] == INF)
+			if (board[nx][ny] != '#')
 			{
-				fire_check[ny][nx] = fire_check[y][x] + 1;
-				q.push({ ny, nx });
+				// 이미 불이 있을 경우에 대한 예외처리
+				if (board[nx][ny] == 'F' && fire_dist[nx][ny] <= fire_dist[x][y] + 1)
+					continue;
+
+				board[nx][ny] = 'F';
+				fire.push({ nx, ny });
+				fire_dist[nx][ny] = fire_dist[x][y] + 1;					
 			}
 		}
 	}
 
-	q.push(j_pos);
-	j_check[j_pos.first][j_pos.second] = 1;
-
-	while (q.size())
+	// 지훈 이동
+	while (!jh.empty())
 	{
-		tie(y, x) = q.front();
-		q.pop();
+		tie(x, y) = jh.front();
+		jh.pop();
 
-		if (y == 0 || x == 0 || y == r - 1 || x == c - 1)
-		{
-			ans = j_check[y][x];
-			break;
-		}
+		jh_visited[x][y] = true;
 
 		for (int i = 0; i < 4; i++)
 		{
-			int ny = dy[i] + y;
 			int nx = dx[i] + x;
+			int ny = dy[i] + y;
 
-			if (ny < 0 || nx < 0 || ny >= r || nx >= c || j_check[ny][nx] || N[ny][nx] == '#')
-				continue;
-			
-			if (j_check[y][x] + 1 < fire_check[ny][nx])
+			if (nx < 0 || nx >= r || ny < 0 || ny >= c)
 			{
-				j_check[ny][nx] = j_check[y][x] + 1;
-				q.push({ ny, nx });
+				cout << dist[x][y] + 1;
+				return 0;
+			}
+				//continue;
+
+			if (board[nx][ny] == '#' || jh_visited[nx][ny])
+				continue;
+
+			if (fire_dist[nx][ny] == -1 || dist[x][y] + 1 < fire_dist[nx][ny])
+			{
+				jh_visited[nx][ny] = true;
+				jh.push({ nx, ny });
+				dist[nx][ny] = dist[x][y] + 1;
 			}
 		}
 	}
 
-	if (ans == 0)
-		cout << "IMPOSSIBLE" << "\n";
-	else
-		cout << ans << "\n";
+	cout << "IMPOSSIBLE";
 }
