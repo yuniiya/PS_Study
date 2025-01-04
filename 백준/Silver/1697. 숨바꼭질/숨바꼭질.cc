@@ -13,7 +13,6 @@ int dy[] = { 0, 1, 0, -1 };
 
 int board[200002];
 int n, k;
-int ans = 987654321;
 queue<int> q;
 
 void Func(int x, int dist)
@@ -26,8 +25,8 @@ void Func(int x, int dist)
 
 	if (x == k)
 	{
-		ans = min(ans, dist);
-		return;
+		cout << dist;
+		exit(0);
 	}
 
 	board[x] = dist;
@@ -58,6 +57,4 @@ int main()
 		Func(t - 1, board[t] + 1);
 		Func(t * 2, board[t] + 1);
 	}
-
-	cout << ans;
 }
