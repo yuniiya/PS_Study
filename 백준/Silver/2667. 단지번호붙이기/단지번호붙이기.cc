@@ -19,10 +19,11 @@ vector<int> v;
 
 int bfs(int x, int y)
 {
-	int ret = 0;
+	int ret = 1;
 
 	queue<pair<int, int>> q;
 	q.push({ x, y });
+	board[x][y] = cnt;
 
 	while(!q.empty())
 	{
@@ -42,10 +43,6 @@ int bfs(int x, int y)
 			ret++;
 		}
 	}
-
-	// 한 칸이라면
-	if (ret == 0)
-		ret++;
 
 	return ret;
 }
