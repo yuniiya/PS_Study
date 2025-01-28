@@ -1,42 +1,41 @@
 #include <iostream>
 #include <algorithm>
-#include <vector>
+#include <string>
+#include <stack>
+#include <memory.h>
 
 using namespace std;
+
+int N[101][101];
+bool Visited[101][101];
+int n;
+int Ans = 1;
 
 int dy[] = { -1, 0, 1, 0 };
 int dx[] = { 0, -1, 0, 1 };
 
-int h;
-int n;
-int Ans;
-int Ret;
-int tx, ty;
-int N[104][104];
-int M[104][104];
-bool Visited[104][104];
-int Idx[104];
-void dfs(int y, int x)
+void dfs(int y, int x, int d)
 {
 	Visited[y][x] = true;
 
 	for (int i = 0; i < 4; i++)
 	{
-		int ny = y + dy[i];
-		int nx = x + dx[i];
+		int ny = dy[i] + y;
+		int nx = dx[i] + x;
 
-		if (ny < 0 || nx < 0 || nx >= n || ny >= n)
+		if (ny >= n || nx >= n || ny < 0 || nx < 0)
 			continue;
 
-		if (Visited[ny][nx] || M[ny][nx] == 0)
-			continue;
-
-		dfs(ny, nx);
+		if (!Visited[ny][nx] && N[ny][nx] > d)
+			dfs(ny, nx, d);
 	}
 }
 
-int main()
+int main() 
 {
+	ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+	cout.tie(NULL);
 	cin >> n;
 
 	for (int i = 0; i < n; i++)
@@ -44,47 +43,27 @@ int main()
 		for (int j = 0; j < n; j++)
 		{
 			cin >> N[i][j];
-			h = max(h, N[i][j]);
 		}
 	}
 
-	int th = h;
-	h--;
-
-	while (h >= 0)
+	for (int d = 1; d <= 100; d++)
 	{
-		vector<pair<int, int>> V;
-
-		// 영역 계산
+		int Ret = 0;
 		for (int i = 0; i < n; i++)
 		{
 			for (int j = 0; j < n; j++)
 			{
-				if (N[i][j] > h)
+				if (!Visited[i][j] && N[i][j] > d)
 				{
-					M[i][j] = 1;
-					V.push_back({ i, j });
+					dfs(i, j, d);
+					Ret++;
 				}
 			}
 		}
 
-		for (auto i : V)
-		{
-			tie(ty, tx) = i;
+		Ans = max(Ans, Ret);
 
-			if (!Visited[ty][tx])
-			{
-				dfs(ty, tx);
-				Ret++;
-			}
-		}
-
-		Ans = max(Ret, Ans);
-		Ret = 0;
-
-		fill(&M[0][0], &M[0][0] + 104 * 104, 0);
-		fill(&Visited[0][0], &Visited[0][0] + 104 * 104, false);
-		h--;
+		fill(&Visited[0][0], &Visited[0][0] + 101 * 101, false);
 	}
 
 	cout << Ans << endl;
