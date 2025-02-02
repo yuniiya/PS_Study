@@ -28,28 +28,27 @@ void Melt(int x, int y)
 		tie(x, y) = q.front();
 		q.pop();
 
+		int cnt = 0;
+
 		for (int i = 0; i < 4; i++)
 		{
 			int nx = dx[i] + x;
 			int ny = dy[i] + y;
 
-			if (nx < 0 || nx >= n || ny < 0 || ny >= m || visited[nx][ny])
+			if (nx < 0 || nx >= n || ny < 0 || ny >= m)
 				continue;
 
 			if (board[nx][ny] == -1)
 			{
-				q.push({ nx, ny });
-				visited[nx][ny] = true;
-			}
-			if (board[nx][ny] > 0)
-			{
-				board[nx][ny]--;
-				if (board[nx][ny] == 0)
-				{
-					NewSea.push_back({ nx,ny });
-				}
+				cnt++;
 			}
 		}
+
+		board[x][y] = max(0, board[x][y] - cnt);
+
+		if (board[x][y] == 0)
+			NewSea.push_back({ x, y });
+
 	}
 }
 
@@ -136,7 +135,7 @@ int main()
 		{
 			for (int j = 0; j < m; j++)
 			{
-				if (board[i][j] == -1 && !visited[i][j])
+				if (board[i][j] > 0 && !visited[i][j])
 				{
 					Melt(i, j);
 				}
