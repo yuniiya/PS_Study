@@ -1,19 +1,22 @@
 #include <iostream>
 #include <algorithm>
 #include <vector>
-#include <map>
+#include <string>
+#include <stack>
+#include <queue>
+#include <tuple>
+#include <memory.h>
 
 using namespace std;
-map<int, vector<bool>> M;
-int Start = 101, End;
-int Ans;
+
+int a, b, c, Max, ans;
+int arr[102];
 int main()
 {
-	ios_base::sync_with_stdio(false);
-	cin.tie(NULL);
-	cout.tie(NULL);
+	ios::sync_with_stdio(false);
+	cin.tie(0);
+	cout.tie(0);
 
-	int a, b, c;
 	cin >> a >> b >> c;
 
 	for (int i = 0; i < 3; i++)
@@ -21,45 +24,32 @@ int main()
 		int n, m;
 		cin >> n >> m;
 
-		vector<bool> B;
-		B.resize(m);
+		Max = max(Max, m);
 
-		// n~m까지 true로 채워넣고, map에 보관
-		for (int j = n; j < m; j++)
+		for (int i = n; i < m; i++)
 		{
-			B[j] = true;
+			arr[i]++;
 		}
-
-		M.insert({i, B});
-
-		Start = min(n, Start);
-		End = max(m, End);
 	}
 
-	// map의 각 vector의 요소가 true라면, Cnt++;
-	// Cnt가 1이라면 요금은 a, 2라면 b, 3이라면 c
-	// Ans += Cnt * 요금
-
-	for (int i = Start; i < End; i++)
+	for (int i = 1; i < Max; i++)
 	{
-		int Cnt = 0;
+		if (arr[i] == 0)
+			continue;
 
-		for (int j = 0; j < 3; j++)
+		if (arr[i] == 1)
 		{
-			if (i >= M[j].size())
-				continue;
-
-			if (true == M[j][i])
-				Cnt++;
+			ans += arr[i] * a;
 		}
-
-		if (1 == Cnt)
-			Ans += a;
-		else if (2 == Cnt)
-			Ans += b * Cnt;
-		else
-			Ans += c * Cnt;
+		else if (arr[i] == 2)
+		{
+			ans += arr[i] * b;
+		}
+		else if (arr[i] == 3)
+		{
+			ans += arr[i] * c;
+		}
 	}
 
-	cout << Ans; 
+	cout << ans;
 }
