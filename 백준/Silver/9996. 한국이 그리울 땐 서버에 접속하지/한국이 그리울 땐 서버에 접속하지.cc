@@ -22,7 +22,6 @@ int main()
 	int idx = s.find('*');
 	string prefix = s.substr(0, idx);
 	string suffix = s.substr(idx + 1);
-	string target = prefix + suffix;
 
 	for (int i = 0; i < n; i++)
 	{
