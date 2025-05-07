@@ -28,10 +28,9 @@ int main()
 	{
 		cin >> ss;
 		
-		if (ss.size() && (int)ss.size() - (int)suffix.size() > 0)
+		if ((int)ss.size() >= (int)prefix.size() + (int)suffix.size())
 		{
-			string tmp = ss.substr(0, idx) + ss.substr((int)ss.size() - (int)suffix.size());
-			if((int)ss.size() >= (int)target.size() && tmp == target)
+			if(prefix == ss.substr(0, idx) && suffix == ss.substr((int)ss.size() - (int)suffix.size()))
 			{
 				cout << "DA" << "\n";
 				continue;
