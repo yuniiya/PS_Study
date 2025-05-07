@@ -1,44 +1,45 @@
 #include <iostream>
+#include <algorithm>
+#include <vector>
 #include <string>
+#include <stack>
+#include <queue>
+#include <tuple>
+#include <memory.h>
 
 using namespace std;
-pair<string, string> P;
+
+int n;
+string s,ss;
 int main()
 {
-	// 1. 입력받은 문자열을 *을 기준으로 두 부분으로 나눈다.
-	int n;
-	string s;
+	ios::sync_with_stdio(false);
+	cin.tie(0);
+	cout.tie(0);
 
-	cin >> n;
-	cin >> s;
+	cin >> n >> s;
 
-	for (int i = 0; i < s.size(); i++)
-	{
-		if (s[i] == '*')
-		{
-			P.second = s.substr(i + 1, s.size() - i);
-			break;
-		}
-
-		P.first += s[i];
-	}
+	int idx = s.find('*');
+	string prefix = s.substr(0, idx);
+	string suffix = s.substr(idx + 1);
+	string target = prefix + suffix;
 
 	for (int i = 0; i < n; i++)
 	{
-		string Input;
-		cin >> Input;
+		cin >> ss;
+		
+		if (ss.size() && (int)ss.size() - (int)suffix.size() > 0)
+		{
+			string tmp = ss.substr(0, idx) + ss.substr((int)ss.size() - (int)suffix.size());
+			if((int)ss.size() >= (int)target.size() && tmp == target)
+			{
+				cout << "DA" << "\n";
+				continue;
+			}
+		}
 
-		if (s.size() - 1 > Input.size())
-		{
-			cout << "NE" << "\n";
-		}
-		else if (P.first == Input.substr(0, P.first.size()) && P.second == Input.substr(Input.size() - P.second.size()))
-		{
-			cout << "DA" << "\n";
-		}
-		else
-		{
-			cout << "NE" << "\n";
-		}
+		cout << "NE" << "\n";
 	}
+
+	return 0;
 }
