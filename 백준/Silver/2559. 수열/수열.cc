@@ -1,47 +1,39 @@
 #include <iostream>
-#include <vector>
 #include <algorithm>
+#include <vector>
+#include <string>
+#include <stack>
+#include <queue>
+#include <tuple>
+#include <memory.h>
+#include <map>
 
 using namespace std;
+
+int n, k, a;
+int ans = -987654321;
+int psum[100002];
 int main()
 {
-	ios_base::sync_with_stdio(false);
-	cin.tie(NULL);
-	cout.tie(NULL);
+	ios::sync_with_stdio(false);
+	cin.tie(0);
+	cout.tie(0);
 
-	vector<int> Sum;
-	vector<int> Ans;
-
-	int n, k;
 	cin >> n >> k;
 
-	Sum.resize(n);
-
-	for (int i = 0; i < n; i++)
+	for (int i = 1; i <= n; i++)
 	{
-		int a;
 		cin >> a;
 
-		// 부분합 저장
-		if (i != 0)
-			Sum[i] = Sum[i - 1] + a;
-		else
-			Sum[i] = a;
-	}
-	
-	int Idx = k - 1;
-	int i = -1;
-	while (Idx != n)
-	{
-		if (i != -1)
-			Ans.push_back(Sum[Idx] - Sum[i]);
-		else
-			Ans.push_back(Sum[Idx]);
-		
-		i++;
-		Idx++;
+		psum[i] = a + psum[i - 1];
 	}
 
-	sort(Ans.begin(), Ans.end());
-	cout << Ans.back();
+	for (int i = k; i <= n; i++)
+	{
+		ans = max(ans, psum[i] - psum[i - k]);
+	}
+
+	cout << ans << "\n";
+
+	return 0;
 }
