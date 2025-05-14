@@ -1,38 +1,48 @@
 #include <iostream>
-#include <string>
+#include <vector>
+#include <utility>
+#include <algorithm>
+#include <unordered_map>
+#include <map>
 #include <stack>
 
 using namespace std;
+
+int n, ans;
 string s;
-int n;
-int Cnt;
 int main()
 {
+	ios::sync_with_stdio(false);
+	cin.tie(NULL);
 	cin >> n;
+
 	for (int i = 0; i < n; i++)
 	{
+		stack<char> st;
 		cin >> s;
 
-		stack<int> ST;
-		int j = (int)s.size() - 1;
-
-		while (j >= 0)
+		for (char c : s)
 		{
-			if (ST.size() && ST.top() == s[j])
+			if (st.empty())
 			{
-				ST.pop();
+				st.push(c);
 			}
 			else
 			{
-				ST.push(s[j]);
+				if (st.top() == c)
+				{
+					st.pop();
+				}
+				else
+				{
+					st.push(c);
+				}
 			}
-
-			j--;
 		}
 
-		if (ST.empty())
-			Cnt++;
+		if (st.empty())
+			ans++;
 	}
 
-	cout << Cnt;
+	cout << ans;
 }
