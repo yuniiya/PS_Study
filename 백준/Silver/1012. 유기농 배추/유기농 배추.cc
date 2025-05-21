@@ -1,28 +1,35 @@
 #include <iostream>
+#include <algorithm>
 #include <vector>
+#include <string>
+#include <stack>
+#include <queue>
+#include <tuple>
+#include <memory.h>
+#include <map>
 
 using namespace std;
 
-int dy[] = { -1, 0, 1, 0 };
-int dx[] = { 0, -1, 0, 1 };
+const int dy[] = { -1, 0, 1, 0 };
+const int dx[] = { 0, 1, 0, -1 };
 
-int n, m;
-int t, k;
-int Ans;
-
-int N[54][54];
-bool Visited[54][54];
+int t, n, m, k;
+int board[52][52];
+bool visited[52][52];
 
 void dfs(int y, int x)
 {
-	Visited[y][x] = true;
+	visited[y][x] = true;
 
 	for (int i = 0; i < 4; i++)
 	{
 		int ny = y + dy[i];
 		int nx = x + dx[i];
 
-		if (ny < 0 || nx < 0 || ny >= n || nx >= m || Visited[ny][nx] || N[ny][nx] == 0)
+		if (ny < 0 || ny >= n || nx < 0 || nx >= m || visited[ny][nx])
+			continue;
+
+		if (board[ny][nx] == 0)
 			continue;
 
 		dfs(ny, nx);
@@ -31,35 +38,42 @@ void dfs(int y, int x)
 
 int main()
 {
+	ios::sync_with_stdio(false);
+	cin.tie(0);
+	cout.tie(0);
+
 	cin >> t;
 
-	for (int i = 0; i < t; i++)
+	while (t--)
 	{
-		cin >> n >> m >> k;
-		vector<pair<int, int>> V;
-
-		for (int j = 0; j < k; j++)
+		int ret = 0;
+		cin	>> m >> n >> k;
+		
+		for (int i = 0; i < k; i++)
 		{
 			int a, b;
 			cin >> a >> b;
 
-			N[a][b] = 1;
-			V.push_back({ a, b });
+			board[b][a] = 1;
 		}
 
-		for (auto iter : V)
+		for (int i = 0; i < n; i++)
 		{
-			if (Visited[iter.first][iter.second])
-				continue;
-
-			dfs(iter.first, iter.second);
-			Ans++;
+			for (int j = 0; j < m; j++)
+			{
+				if (board[i][j] == 1 && !visited[i][j])
+				{
+					ret++;
+					dfs(i, j);
+				}
+			}
 		}
 
-		cout << Ans << '\n';
+		cout << ret << "\n";
 
-		Ans = 0;
-		fill(&N[0][0], &N[0][0] + 54 * 54, 0);
-		fill(&Visited[0][0], &Visited[0][0] + 54 * 54, false);
+		fill(&board[0][0], &board[0][0] + 52 * 52, 0);
+		fill(&visited[0][0], &visited[0][0] + 52 * 52, false);
 	}
+
+	return 0;
 }
