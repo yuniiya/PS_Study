@@ -1,80 +1,92 @@
 #include <iostream>
 #include <algorithm>
 #include <vector>
+#include <string>
+#include <stack>
+#include <queue>
+#include <tuple>
+#include <memory.h>
+#include <map>
 
 using namespace std;
 
-int dy[] = { -1, 0, 1, 0 };
-int dx[] = { 0, -1, 0, 1 };
+const int dy[] = { -1, 0, 1, 0 };
+const int dx[] = { 0, 1, 0, -1 };
 
-int m, n, k;
+int n, m, k;
 int lx, ly, rx, ry;
-int N[101][101];
-bool Visited[101][101];
-vector<int> V;
+int dist[102][102];
+vector<int> arr;
 
-int dfs(int y, int x)
+int bfs(int y, int x) 
 {
-	int Ret = 1;
+	int ret = 1;
 
-	if (Visited[y][x])
+	queue<pair<int, int>> q;
+	q.push({ y, x });
+	dist[y][x] = 1;
+
+	while (q.size())
 	{
-		return Ret;
-	}
+		tie(y, x) = q.front();
+		q.pop();
 
-	Visited[y][x] = true;
-
-	for (int i = 0; i < 4; i++)
-	{
-		int ny = dy[i] + y;
-		int nx = dx[i] + x;
-
-		if (ny >= m || nx >= n || ny < 0 || nx < 0 || N[ny][nx] != 0)
-			continue;
-
-		if (!Visited[ny][nx])
+		for (int i = 0; i < 4; i++)
 		{
-			Ret += dfs(ny, nx);
+			int ny = dy[i] + y;
+			int nx = dx[i] + x;
+
+			if (ny < 0 || ny >= m || nx < 0 || nx >= n || dist[ny][nx] != 0)
+				continue;
+
+			dist[ny][nx] = dist[y][x] + 1;
+			q.push({ ny, nx });
+			ret++;
 		}
 	}
 
-	return Ret;
+	return ret;
 }
 
 int main()
 {
+	ios::sync_with_stdio(false);
+	cin.tie(0);
+	cout.tie(0);
+
 	cin >> m >> n >> k;
 
-	for (int i = 0; i < k; i++)
+	while (k--)
 	{
 		cin >> lx >> ly >> rx >> ry;
 
-		for (int y = ly; y < ry; y++)
+		for (int i = m - ry; i < m - ly; i++)
 		{
-			for (int x = lx; x < rx; x++)
+			for (int j = lx; j < rx; j++)
 			{
-				N[y][x] = 1;
+				dist[i][j] = -1;
 			}
 		}
 	}
 
 	for (int i = 0; i < m; i++)
 	{
-		for (int j = 0; j < n; j++)
+		for (int j = 0; j  < n; j ++)
 		{
-			if (N[i][j] == 0 && !Visited[i][j])
+			if (dist[i][j] == 0) 
 			{
-				V.push_back({ dfs(i, j) });
+				arr.push_back(bfs(i, j));
 			}
 		}
 	}
 
-	sort(V.begin(), V.end());
+	sort(arr.begin(), arr.end());
 
-	cout << V.size() << endl;
-
-	for (auto v : V)
+	cout << arr.size() << "\n";
+	for (int i : arr)
 	{
-		cout << v << " ";
+		cout << i << " ";
 	}
+
+	return 0;
 }
