@@ -4,24 +4,27 @@
 #include <tuple>
 #include <vector>
 #include <map>
+#include <string>
+#include <iomanip>
+#include <stack>
+#include <memory.h>
 
 using namespace std;
 
-int dy[] = { -1, 0, 1, 0 };
-int dx[] = { 0, -1, 0, 1 };
+const int dy[] = { -1, 0, 1, 0 };
+const int dx[] = { 0, 1, 0, -1 };
 
-int n, c, a;
-map<int, int> mp;
+int n, c, k;
+map<int, int> mp_cnt;
 map<int, int> mp_order;
-vector<pair<int, int>> v;
-bool cmp(pair<int, int> a, pair<int, int> b)
-{
-	if (a.second == b.second)
-	{
-		return mp_order[a.first] < mp_order[b.first];
-	}
+vector<int> v;
 
-	return a.second > b.second;
+bool cmp(int a, int b)
+{
+	if (mp_cnt[a] != mp_cnt[b])
+		return mp_cnt[a] > mp_cnt[b];
+
+	return mp_order[a] < mp_order[b];
 }
 
 int main()
@@ -30,26 +33,21 @@ int main()
 
 	for (int i = 0; i < n; i++)
 	{
-		cin >> a;
+		cin >> k;
 
-		mp[a]++;
+		mp_cnt[k]++;
 
-		if (mp_order[a] == 0)
-			mp_order[a] = i + 1;
-	}
+		if (mp_order[k] == 0)
+			mp_order[k] = i + 1;
 
-	for (auto iter : mp)
-	{
-		v.push_back({ iter.first, iter.second });
+		v.push_back(k);
 	}
 
 	sort(v.begin(), v.end(), cmp);
 
-	for (auto iter : v)
+	for (int i : v)
 	{
-		for (int i = 0; i < iter.second; i++)
-		{
-			cout << iter.first << " ";
-		}
+		cout << i << " ";
 	}
-}
+}	
+
