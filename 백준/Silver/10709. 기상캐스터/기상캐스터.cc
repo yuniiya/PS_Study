@@ -1,60 +1,44 @@
 #include <iostream>
+#include <algorithm>
+#include <vector>
 #include <string>
+#include <stack>
+#include <queue>
+#include <tuple>
+#include <memory.h>
+#include <map>
+#include <unordered_map>
 
 using namespace std;
 
-int h, w;
 string s;
-string S[101];
-int Ans[101][101];
+int h, w;
+int arr[102][102];
 int main()
 {
+	ios::sync_with_stdio(false);
+	cin.tie(0);
+	cout.tie(0);
+
+	fill(&arr[0][0], &arr[0][0] + 102 * 102, -1);
+
 	cin >> h >> w;
 
 	for (int i = 0; i < h; i++)
 	{
 		cin >> s;
+		int idx = -1;
 
-		S[i] = s;
-	}
-
-	for (int i = 0; i < h; i++)
-	{
-		for (int j = 0; j < w; j++)
+		for (int j = 0; j < w; j ++)
 		{
-			// 처음부터 구름이 있던 자리
-			if (S[i][j] == 'c')
-				continue;
-
-			// 왼쪽 잘라오기
-			string tmp = S[i].substr(0, j);		
-				
-			// 왼쪽에 구름이 있는지 체크
-			if (tmp.find('c') == string::npos)
+			if (s[j] == 'c')
 			{
-				Ans[i][j] = -1;
-				continue;
+				idx = j;
+				arr[i][j] = 0;
 			}
-		
-			// 구룸이 여러개라면, 가장 가까운 인덱스
-			int ccnt = 0;
-			int Idx = -1;
-			for (int k = 0; k < tmp.size(); k++)
+			else if (s[j] == '.' && idx != -1)
 			{
-				if (tmp[k] == 'c')
-				{
-					ccnt++;
-					Idx = k;
-				}
-			}
-
-			if (ccnt > 1)
-			{
-				Ans[i][j] = j - Idx;
-			}
-			else
-			{
-				Ans[i][j] = (j - (int)tmp.find('c'));
+				arr[i][j] = j - idx;
 			}
 		}
 	}
@@ -63,9 +47,11 @@ int main()
 	{
 		for (int j = 0; j < w; j++)
 		{
-			cout << Ans[i][j] << ' ';
+			cout << arr[i][j] << ' ';
 		}
-		
-		cout << '\n';
+
+		cout << "\n";
 	}
+
+	return 0;
 }
