@@ -1,52 +1,54 @@
 #include <iostream>
+#include <algorithm>
+#include <queue>
+#include <tuple>
 #include <vector>
+#include <map>
+#include <string>
+#include <iomanip>
+#include <stack>
+#include <memory.h>
 
 using namespace std;
 
-int n, m;
-int AnsTime, AnsCnt, Cnt;
-int N[101][101];
-bool visited[101][101];
-
 const int dy[] = { -1, 0, 1, 0 };
-const int dx[] = { 0, 1, 0, -1 };
+const int dx[] = { 0, 1, 0,-1 };
 
-vector<pair<int, int>> sideList;
-vector<pair<int, int>> popList;
-
-void dfs(int y, int x)
+int n, m;
+int N[101][101];
+int visited[101][101];
+int ansTime, ansCnt;
+vector<pair<int, int>> deleteLists;
+void bfs(int y, int x)
 {
-	visited[y][x] = true;
+	queue<pair<int, int>> q;
+	q.push({ y, x });
 
-	for (int i = 0; i < 4; i++)
+	visited[y][x] = 1;
+
+	while (q.size())
 	{
-		int ny = dy[i] + y;
-		int nx = dx[i] + x;
+		pair<int, int> f = q.front();
+		q.pop();
 
-		if (ny < 0 || ny >= n || nx < 0 || nx >= m || visited[ny][nx])
-			continue;
-
-		// 치즈를 만났다
-		if (N[ny][nx] == 1)
+		for (int i = 0; i < 4; i++)
 		{
-			bool Flag = false;
-			for (int j = 0; j < popList.size(); j++)
-			{
-				if (popList[j].first == ny && popList[j].second == nx)
-				{
-					Flag = true;
-					break;
-				}
-			}
+			int ny = dy[i] + f.first;
+			int nx = dx[i] + f.second;
 
-			if (!Flag)
+			if (ny < 0 || ny >= n || nx < 0 || nx >= m || visited[ny][nx])
+				continue;
+
+			visited[ny][nx] = 1;
+
+			if (N[ny][nx] == 1)
 			{
-				popList.push_back({ ny, nx });
+				deleteLists.push_back({ ny, nx });
 			}
-		}
-		else
-		{
-			dfs(ny, nx);
+			else
+			{
+				q.push({ ny, nx });
+			}
 		}
 	}
 }
@@ -60,47 +62,40 @@ int main()
 		for (int j = 0; j < m; j++)
 		{
 			cin >> N[i][j];
-
-			if (i == 0 || i == n - 1 || j == 0 || j == m - 1)
-			{
-				sideList.push_back({ i, j });
-			}
-			else if (N[i][j] == 1)
-			{
-				// 치즈가 있는 칸 개수
-				Cnt++;
-			}
 		}
 	}
 
-	// 치즈가 있는 동안
-	AnsCnt = Cnt;
-
-	while (Cnt)
+	while (true)
 	{
-		for (int i = 0; i < sideList.size(); i++)
+		bfs(0, 0);
+
+		// 치즈 녹이기
+		for (pair<int, int> d : deleteLists)
 		{
-			if (!visited[sideList[i].first][sideList[i].second])
+			N[d.first][d.second] = 0;
+		}
+
+		ansCnt = deleteLists.size();
+		ansTime++;
+		
+		bool Flag = false;
+		for (int i = 0; i < n; i++)
+		{
+			for (int j = 0; j < m; j++)
 			{
-				dfs(sideList[i].first, sideList[i].second);
-				fill(&visited[0][0], &visited[0][0] + 101 * 101, false);
+				if (N[i][j] == 1)
+					Flag = true;
 			}
 		}
 
-		for (int i = 0; i < popList.size(); i++)
-		{
-			N[popList[i].first][popList[i].second] = 0;
-			Cnt--;
-		}
+		if (!Flag)
+			break;
 
-		popList.clear();
-
-		if (Cnt)
-			AnsCnt = Cnt;
-
-		AnsTime++;
+		memset(visited, 0, sizeof(visited));
+		deleteLists.clear();
 	}
 
-	cout << AnsTime << "\n";
-	cout << AnsCnt << "\n";
+	cout << ansTime << "\n" << ansCnt << "\n";
 }
+
+
