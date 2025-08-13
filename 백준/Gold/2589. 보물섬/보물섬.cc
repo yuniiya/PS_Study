@@ -1,24 +1,31 @@
 #include <iostream>
+#include <algorithm>
+#include <vector>
+#include <string>
+#include <stack>
 #include <queue>
 #include <tuple>
-#include <vector>
 #include <memory.h>
+#include <map>
+#include <unordered_map>
 
 using namespace std;
 
 const int dy[] = { -1, 0, 1, 0 };
-const int dx[] = { 0, 1, 0,-1 };
+const int dx[] = { 0, 1, 0, -1 };
 
-int n, m, ans, y, x;
-char N[51][51];
-int visited[51][51];
-
-void bfs(int y, int x)
+vector<pair<int, int>> t;
+char N[52][52];
+int visited[52][52];
+int n, m;
+string s;
+int ans = 1;
+int bfs(int y, int x)
 {
+	int ret = 0;
+	visited[y][x] = 1;
 	queue<pair<int, int>> q;
 	q.push({ y, x });
-
-	visited[y][x] = 1;
 
 	while (q.size())
 	{
@@ -33,45 +40,43 @@ void bfs(int y, int x)
 			if (ny < 0 || ny >= n || nx < 0 || nx >= m || visited[ny][nx] || N[ny][nx] == 'W')
 				continue;
 
-			visited[ny][nx] = visited[y][x] + 1;
-
-			if (N[ny][nx] == 'L')
-			{
-				ans = max(ans, visited[ny][nx]);
-			}
-
 			q.push({ ny, nx });
+			ret = visited[ny][nx] = visited[y][x] + 1;
 		}
 	}
+
+	return ret - 1;
 }
 
 int main()
 {
-	// 육지: L 바다: W
-	ios_base::sync_with_stdio(false);
-	cin.tie(NULL);
+	ios::sync_with_stdio(false);
+	cin.tie(0);
+	cout.tie(0);
 
 	cin >> n >> m;
-
+	
+	fill(&N[0][0], &N[0][0] + 52 * 52, 'W');
 	for (int i = 0; i < n; i++)
 	{
+		cin >> s;
 		for (int j = 0; j < m; j++)
 		{
-			cin >> N[i][j];
+			N[i][j] = s[j];
+
+			if (s[j] == 'L')
+				t.push_back({ i, j });
 		}
 	}
 
-	for (int i = 0; i < n; i++)
+	for (pair<int, int> p : t)
 	{
-		for (int j = 0; j < m; j++)
-		{
-			if (N[i][j] == 'L')
-			{
-				bfs(i, j);
-				memset(visited, 0, sizeof(visited));
-			}
-		}
+		int ret = bfs(p.first, p.second);
+		ans = max(ret, ans);
+		memset(visited, 0, sizeof(visited));
 	}
 
-	cout << ans - 1 << "\n";
+	cout << ans;
+
+	return 0;
 }
